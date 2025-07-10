@@ -1,0 +1,30 @@
+input {
+  display: block;
+  width: 20%;
+  height: 28px;
+  font-size: 14px;
+  border-radius: 4px;
+  border: 1px solid #e5e5e5;
+  outline: none;
+}
+
+input:focus {
+  border-color: blue;
+  box-shadow: 0 0 10px rgba(197, 223, 251, 0.25);
+  outline: 2px solid rgba(46, 147, 255, 0.5);
+}
+
+button {
+  background-color: blue;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 12px;
+  margin-top: 12px;
+  cursor: pointer;
+}
+
+.error-message {
+  color: red;
+  font-size: 12px;
+}
