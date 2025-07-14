@@ -1,39 +1,14 @@
 import express from "express";
 const app = express();
+import { Product } from "../model/products.model.js";
 
 export const productsHomePage = (req, res) => {
   res.send("Welcome to home page of products");
 };
-export const getAllProducts = (req, res) => {
-  const products = [
-    {
-      title: "Oppo Mobile 1",
-      description: "Some Description",
-      price: 7000,
-    },
-    {
-      title: "Oppo Mobile 2",
-      description: "Some Description",
-      price: 7000,
-    },
-    {
-      title: "Oppo Mobile 3",
-      description: "Some Description",
-      price: 7000,
-    },
-    {
-      title: "Oppo Mobile 4",
-      description: "Some Description",
-      price: 7000,
-    },
-    {
-      title: "Oppo Mobile 5",
-      description: "Some Description",
-      price: 7000,
-    },
-  ];
-
-  res.send(products);
+export const getAllProducts = async (req, res) => {
+  const products = await Product.find();
+  console.log(products);
+  res.send("Getting all products")
 };
 
 export const getSingleProduct = (req, res) => {
@@ -42,8 +17,10 @@ export const getSingleProduct = (req, res) => {
 export const updateProduct = (req, res) => {
   res.send("Updating a product");
 };
-export const newProduct = (req, res) => {
-  res.send("Sending a new product");
+export const newProduct = async (req, res) => {
+  const newProduct = req.body;
+  const p = await Product.create(newProduct);
+  res.send(p);
 };
 export const deleteProduct = (req, res) => {
   res.send("Deleting a product");
