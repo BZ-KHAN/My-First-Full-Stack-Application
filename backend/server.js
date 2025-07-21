@@ -10,12 +10,41 @@ const app = express();
 
 const PORT = 8000;
 
-connectDB();
+await connectDB();
 app.use(bodyParser.json());
 app.use("/", router);
 
+// Handle invalid routes
+app.use((req, res, next) => {
+  res.status(404).json({ error: "Route not found" });
+});
+
 app.use((err, req, res, next) => {
-  console.log(err);
+  let error = { ...err };
+  error.message = err.message;
+
+  // Handling Mongoose Validation Error
+  if (err.name === "ValidationError") {
+    const message = Object.values(err.errors).map((value) => value.message);
+    error = new Error(message);
+    console.log(err);
+    return res.status(400).json({
+      error: error.message,
+    });
+  }
+
+  // Handling Mongoose Duplicate Error
+  if (err.code === 11000) {
+    const field = Object.keys(err.keyValue)[0];
+    return res.status(409).json({
+      error: [
+        {
+          path: field,
+          message: `${field} must be unique`,
+        },
+      ],
+    });
+  }
 });
 
 app.listen(PORT, () => {
