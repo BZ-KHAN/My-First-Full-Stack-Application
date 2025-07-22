@@ -42,8 +42,16 @@ app.use((err, req, res, next) => {
 
   //Handling Cast Error
   if (err.name === "CastError") {
-    res.json(err)
+    const message = `Resource not found. Invalid: ${err.path}`;
+    error = new Error(message);
+    return res.status(400).json({
+      error: error.message,
+    });
   }
+
+  return res.status(err.statusCode || 500).json({
+    error:error.message || "something went wrong"
+  })
 });
 
 app.listen(PORT, () => {

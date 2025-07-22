@@ -18,7 +18,13 @@ export const getSingleProduct = async (req, res, next) => {
   try {
     const { id } = req.params;
     const p = await Product.findById(id);
-    res.status(200).json(p);
+    if (!p) {
+      const error = new Error("Product not found");
+      error.statusCode = 404;
+      return next(error);
+    } else {
+      res.status(200).json(p);
+    }
   } catch (error) {
     next(error);
   }
