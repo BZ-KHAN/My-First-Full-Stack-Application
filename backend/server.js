@@ -27,7 +27,6 @@ app.use((err, req, res, next) => {
   if (err.name === "ValidationError") {
     const message = Object.values(err.errors).map((value) => value.message);
     error = new Error(message);
-    console.log(err);
     return res.status(400).json({
       error: error.message,
     });
@@ -37,13 +36,13 @@ app.use((err, req, res, next) => {
   if (err.code === 11000) {
     const field = Object.keys(err.keyValue)[0];
     return res.status(409).json({
-      error: [
-        {
-          path: field,
-          message: `${field} must be unique`,
-        },
-      ],
+      error: `${field} must be unique`,
     });
+  }
+
+  //Handling Cast Error
+  if (err.name === "CastError") {
+    res.json(err)
   }
 });
 
