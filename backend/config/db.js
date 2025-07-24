@@ -1,10 +1,12 @@
 import mongoose from "mongoose";
 import { Product } from "../model/products.model.js";
+import "dotenv/config";
+
 
 export const connectDB = async () => {
   try {
     await mongoose
-      .connect("mongodb://127.0.0.1:27017/e-commerce")
+      .connect(process.env.DB_URI)
       .then(() => console.log("DataBase Connected!"));
     await Product.syncIndexes();
   } catch (error) {

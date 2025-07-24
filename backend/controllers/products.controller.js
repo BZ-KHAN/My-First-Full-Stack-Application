@@ -34,7 +34,13 @@ export const updateProduct = async (req, res, next) => {
     const { id } = req.params;
     const body = req.body;
     const p = await Product.findByIdAndUpdate(id, body);
-    res.json(p);
+    if (!p) {
+      const error = new Error("Product not found against this ID");
+      error.statusCode = 404;
+      return next(error);
+    } else {
+      res.json(p);
+    }
   } catch (error) {
     next(error);
   }
@@ -52,7 +58,13 @@ export const deleteProduct = async (req, res, next) => {
   try {
     const { id } = req.params;
     const p = await Product.findByIdAndDelete(id);
-    res.json(p);
+    if (!p) {
+      const error = new Error("Product not found against this ID");
+      error.statusCode = 404;
+      next(error);
+    } else {
+      res.json(p);
+    }
   } catch (error) {
     next(error);
   }
